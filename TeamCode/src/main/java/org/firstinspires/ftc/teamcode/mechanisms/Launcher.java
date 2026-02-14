@@ -19,7 +19,7 @@ public class Launcher {
     private DcMotorEx launcher;
     private CRServo leftFeeder;
     private CRServo rightFeeder;
-
+    private Servo hoodServo;
 
     LookUpTable lookUpTable  = new LookUpTable(2);
 
@@ -36,7 +36,8 @@ public class Launcher {
 
 
     public Launcher(HardwareMap hwMap){
-              launcher = hwMap.get(DcMotorEx.class,"launcher");
+        servo = hardwareMap.get(Servo.class,"hood");
+        launcher = hwMap.get(DcMotorEx.class,"launcher");
         leftFeeder = hwMap.get(CRServo.class, "left_feeder");
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
 
@@ -93,6 +94,7 @@ public class Launcher {
                 feederTimer.reset();
                 launchState =LaunchState.LAUNCHING;
                 launcher.setVelocity(lookUpTable.get(ArcadeDrive.getNewPose().getAsVector().minus(field.TargetPose.getAsVector()).getRadians())[0]);
+                servo.setTargetPosition(lookUpTable.get(ArcadeDrive.getNewPose().getAsVector().minus(field.TargetPose.getAsVector()).getRadians())[1]);
                 break;
             case LAUNCHING:
                 if(feederTimer.seconds() > FEED_TIME_SECONDS)
