@@ -1,3 +1,5 @@
+import  ScrewDriversLib.geometry.Pose2D;
+
 public class Vector {
     double x;
     double y;
@@ -45,5 +47,11 @@ public class Vector {
             return angle;
         } 
     }
+
+    public Pose2D getAsPose2D(){
+        return new Pose2D(x,y, getRadins());
+    }
+
+    
 
 }
