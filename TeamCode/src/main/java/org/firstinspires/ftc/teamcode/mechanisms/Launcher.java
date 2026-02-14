@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import 
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
@@ -19,6 +20,10 @@ public class Launcher {
     private CRServo leftFeeder;
     private CRServo rightFeeder;
 
+
+    LookUpTable lookUpTable  = new LookUpTable(2);
+
+
     ElapsedTime feederTimer = new ElapsedTime();
 
     private enum LaunchState {
@@ -30,9 +35,8 @@ public class Launcher {
     private LaunchState launchState;
 
 
-    public void init(HardwareMap hwMap)
-    {
-        launcher = hwMap.get(DcMotorEx.class,"launcher");
+    public Launcher(HardwareMap hwMap){
+              launcher = hwMap.get(DcMotorEx.class,"launcher");
         leftFeeder = hwMap.get(CRServo.class, "left_feeder");
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
 
@@ -45,7 +49,29 @@ public class Launcher {
 
         launchState = LaunchState.IDLE;
         stopLauncher();
+        addLookUpTableCode();
     }
+
+    /**
+     * this is how you use a lookUpTable
+     *
+     *  * // Shooter characterization: distance → (RPM, angle)
+    * LookUpTable shooterTable = new LookUpTable(2);  // 2 outputs
+    * shooterTable.add(1.0, 3000, 45);  // 1m: 3000 RPM, 45°
+    * shooterTable.add(2.0, 3500, 50);  // 2m: 3500 RPM, 50°
+    * shooterTable.add(3.0, 4000, 55);  // 3m: 4000 RPM, 55°
+    * 
+    * You try what angle and speed you need to consider distance and record in a table.
+    *
+    * and you need to put the import this is the file
+    * FTC_23705_2026/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/teamLib/LookUpTable.java
+    * good loak
+    */
+
+     public void addLookUpTableCode(){
+        lookUpTable.add(0,0,0);
+     }
+
 
     public void stopfeeders()
     {
