@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime; 
+import libs.ScrewDriversLib.LookUpTable;
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
@@ -62,9 +63,6 @@ public class Launcher {
     * 
     * You try what angle and speed you need to consider distance and record in a table.
     *
-    * and you need to put the import this is the file
-    * FTC_23705_2026/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/teamLib/LookUpTable.java
-    * good loak
     */
 
      public void addLookUpTableCode(){
@@ -94,6 +92,7 @@ public class Launcher {
                 rightFeeder.setPower(FULL_SPEED);
                 feederTimer.reset();
                 launchState =LaunchState.LAUNCHING;
+                launcher.setVelocity(lookUpTable.get(ArcadeDrive.getNewPose().getAsVector().minus(field.TargetPose.getAsVector()).getRadians())[0]);
                 break;
             case LAUNCHING:
                 if(feederTimer.seconds() > FEED_TIME_SECONDS)

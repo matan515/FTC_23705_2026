@@ -7,10 +7,14 @@ import android.media.Ringtone;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import libs.ScrewDriversLib.odmetry;
+import libs.ScrewDriversLib.geometry.Pose2D;
 
 public class ArcadeDrive {
     private DcMotor leftDrive, rightDrive;
     private final double pi = Math.PI;
+
+    odmetry odmetry;
 
     public void init(HardwareMap hwMap)
     {
@@ -22,9 +26,15 @@ public class ArcadeDrive {
 
         leftDrive.setZeroPowerBehavior(BRAKE);
         rightDrive.setZeroPowerBehavior(BRAKE);
+        odmetry = new odmetry(0);
 
     }
 
+
+    public static Pose2D getCurrentPosition(odmetry odmetry){
+        odmetry = new odmetry(0);
+        return odmetry.getNewPose();
+    }
 
     public void drive(double forward, double rotate)
     {
