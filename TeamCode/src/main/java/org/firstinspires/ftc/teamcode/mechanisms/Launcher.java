@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import 
+import com.qualcomm.robotcore.util.ElapsedTime; 
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
