@@ -3,18 +3,19 @@ import ScrewDriversLib.geometry.Pose2D;
 public class Vector {
     private double x;
     private double y;
-    private Double norm;  // Wrapper class כדי לאפשר null
-    private Double angle; // Wrapper class כדי לאפשר null
+    private Double norm;  
+    private Double angle; 
+    private Pose2D P1;
+    private Pose2D P2;
     
-    // Constructor קרטזי (x, y)
+    
     public Vector(double x, double y) {
         this.x = x;
         this.y = y;
         this.norm = null;
         this.angle = null;
     }
-    
-    // Constructor פולארי (norm, angle) - צריך שם שונה או דרך אחרת להבדיל
+
     public static Vector fromPolar(double norm, double angle) {
         Vector v = new Vector(0, 0);
         v.norm = norm;
@@ -24,11 +25,18 @@ public class Vector {
         return v;
     }
     
-    // Constructor עם זווית
     public Vector(double x, double y, double angle) {
         this.x = x;
         this.y = y;
         this.angle = angle;
+    }
+
+    public Vector(Pose2D P1, Pose2D P2){
+        this.P1 = P1;
+        this.P2 = P2;
+
+        x = P2.getX() - P1.getX();
+        y = P2.getY() - P2.getY();
     }
     
     public double getNorm() {
