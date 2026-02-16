@@ -50,6 +50,7 @@ public class Launcher {
 
         launchState = LaunchState.IDLE;
         stopLauncher();
+        updatePoint();
     }
 
 
@@ -86,7 +87,7 @@ public class Launcher {
             case IDLE:
                 break;
             case SPIN_UP:
-                launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+                launcher.setVelocity(LookUpTable.get(0)[1]);
                 if(launcher.getVelocity() >= LAUNCHER_MIN_VELOCITY)
                     launchState = LaunchState.LAUNCH;
                 break;
