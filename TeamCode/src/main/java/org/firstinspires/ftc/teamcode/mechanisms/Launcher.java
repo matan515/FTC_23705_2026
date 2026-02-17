@@ -25,6 +25,8 @@ public class Launcher {
     private CRServo leftFeeder;
     private CRServo rightFeeder;
 
+    Pose2D targetPose;
+    Pose2D RobotPose;
     ElapsedTime feederTimer = new ElapsedTime();
 
     private enum LaunchState {
@@ -36,7 +38,7 @@ public class Launcher {
     private LaunchState launchState;
 
     public double getDistensFromTarget(){
-        Translation2d
+        return new Translation2d(targetPose.getTrnslasen().minus(RobtotPose));
     }
 
     public void init(HardwareMap hwMap)
