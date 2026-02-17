@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import FtcRobotController.src.LookUpTable;
+import FtcRobotController.src.AutoStaticRobotPose;
+import FtcRobotController.src.Translation2d;
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
@@ -17,6 +19,7 @@ public class Launcher {
     private double LAUNCHER_MIN_VELOCITY = 1150;
 
     LookUpTable LookUpTable;
+    AutoStaticRobotPose AutoStaticRobotPose;
 
     private DcMotorEx launcher;
     private CRServo leftFeeder;
@@ -32,6 +35,9 @@ public class Launcher {
     }
     private LaunchState launchState;
 
+    public double getDistensFromTarget(){
+        Translation2d
+    }
 
     public void init(HardwareMap hwMap)
     {
@@ -47,11 +53,13 @@ public class Launcher {
                 new PIDFCoefficients(300,0,0,10));
 
         leftFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
-
+        AutoStaticRobotPose = new AutoStaticRobotPose();
         launchState = LaunchState.IDLE;
         stopLauncher();
         updatePoint();
     }
+
+
 
 
     /**
@@ -73,6 +81,9 @@ public class Launcher {
     }
 
 
+    public void getDestensToTarget(){
+        AutoStaticRobotPose.get();
+    }
 
     /**
      * 

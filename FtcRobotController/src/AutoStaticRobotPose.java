@@ -1,10 +1,13 @@
 package com.example.ftclibexamples.SharedOdometry;
 
+import java.security.PublicKey;
+
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import FtcRobotController.src.Pose2D;
 
 @Autonomous
 @Disabled
@@ -48,6 +51,10 @@ public class AutoStaticRobotPose extends LinearOpMode {
             // update positions
             odometry.updatePose();
             PositionTracker.robotPose = odometry.getPose();
+        }
+
+        public Pose2D getPose(){
+            return odometry.getPose();
         }
     }
 
