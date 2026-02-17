@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import FtcRobotController.src.LookUpTable;
+import FtcRobotController.src.AutoStaticRobotPose;
+import FtcRobotController.src.Translation2d;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -17,10 +20,15 @@ public class Launcher {
     private double LAUNCHER_TARGET_VELOCITY = 1900;
     private double LAUNCHER_MIN_VELOCITY = 1850;
 
+    LookUpTable LookUpTable;
+    AutoStaticRobotPose AutoStaticRobotPose;
+
     private DcMotorEx launcher;
     private CRServo leftFeeder;
     private CRServo rightFeeder;
 
+    Pose2D targetPose;
+    Pose2D RobotPose;
     ElapsedTime feederTimer = new ElapsedTime();
 
     private enum LaunchState {
@@ -31,6 +39,9 @@ public class Launcher {
     }
     private LaunchState launchState;
 
+    public double getDistensFromTarget(){
+        return new Translation2d(targetPose.getTrnslasen().minus(RobtotPose));
+    }
 
     public void init(HardwareMap hwMap)
     {
@@ -38,15 +49,33 @@ public class Launcher {
         leftFeeder = hwMap.get(CRServo.class, "left_feeder");
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
 
+        LookUpTable = new LookUpTable(2);
+
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
                 new PIDFCoefficients(300,0,0,10));
 
         leftFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
-
+        AutoStaticRobotPose = new AutoStaticRobotPose();
         launchState = LaunchState.IDLE;
         stopLauncher();
+        updatePoint();
+    }
+
+
+
+
+    /**
+     * how to use look up table
+     *  shooterTable.add(1.0, 3000, 45);  // 1m: 3000 RPM, 45°
+     * shooterTable.add(2.0, 3500, 50);  // 2m: 3500 RPM, 50°
+     * shooterTable.add(3.0, 4000, 55);  // 3m: 4000 RPM, 55°
+     * 
+     */
+
+    public void updatePoint(){
+        LookUpTable.add(0,0,0);
     }
 
     public void stopfeeders()
@@ -55,6 +84,17 @@ public class Launcher {
         rightFeeder.setPower(STOP_SPEED);
     }
 
+
+    public void getDestensToTarget(){
+        AutoStaticRobotPose.get();
+    }
+
+    /**
+     * 
+     */
+
+
+
     public void updateState()
     {
         switch (launchState)
@@ -62,7 +102,7 @@ public class Launcher {
             case IDLE:
                 break;
             case SPIN_UP:
-                launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+                launcher.setVelocity(LookUpTable.get(0)[1]);
                 if(launcher.getVelocity() >= LAUNCHER_MIN_VELOCITY)
                     launchState = LaunchState.LAUNCH;
                 break;
